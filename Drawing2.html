@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Scottish Flag</title>
+</head>
+
+<body>
+	<canvas id="ScottishFlag" width="600" height="300">
+		<p> Your browser doesn't support canvas. <p>
+	</canvas>
+	<p>Scottish flag</p>
+	<script type="text/javascript">
+		var drawingCanvas = document.getElementById('ScottishFlag');
+		var context = drawingCanvas.getContext('2d');
+			
+		drawGBFlag(2.5);
+		
+		
+		function drawGBFlag(scale) {
+			drawScottishFlag(scale);
+			drawIrishCross(scale);
+			drawEnglishCross(scale);
+		}
+			
+		function drawUnionFlag(scale) {
+			drawScottishFlag(2.5);
+			drawEnglishCross(2.5);
+		}
+			
+		function drawEnglishCross(scale) {
+			//English flag
+			
+			//Horizontal white line (needed for overlap on Scottish flag)
+			context.beginPath();
+			context.strokeStyle = "#FFFFFF";
+			context.moveTo(0, 50*scale);
+			context.lineWidth = 35 * scale;
+			context.lineTo(201*scale, 50 * scale);
+			context.stroke();
+			context.closePath();
+			
+			//Vertical white line (needed for overlap on Scottish flag)
+			context.beginPath();
+			context.moveTo(100*scale, 0);
+			context.lineWidth = 35 * scale;
+			context.lineTo(100*scale, 101*scale);
+			context.stroke();
+			context.closePath();
+			
+			//Horizontal red line
+			context.beginPath();
+			context.strokeStyle = "#CC0000";
+			context.moveTo(0, 50*scale);
+			context.lineWidth = 20*scale;
+			context.lineTo(201*scale, 50*scale);
+			context.stroke();
+			context.closePath();
+			
+			//Vertical red line
+			context.beginPath();
+			context.moveTo(100*scale, 0);
+			context.lineWidth = 20*scale;
+			context.lineTo(100*scale, 101*scale);
+			context.stroke();
+			context.closePath();
+		}	
+			
+		function drawScottishFlag(scale) {
+			//Scottish Flag
+			//Left triangle
+			context.fillStyle = "#0065BD";
+			context.beginPath();
+			context.moveTo(0,10*scale);
+			context.lineTo(0, 90*scale);
+			context.lineTo(80*scale, 50*scale);
+			context.stroke();
+			context.fill();
+			context.closePath();
+			
+			//Right triangle
+			context.beginPath();
+			context.moveTo(200*scale, 10*scale);
+			context.lineTo(200*scale, 90*scale);
+			context.lineTo(120*scale, 50*scale);
+			context.stroke();
+			context.fill();
+			context.closePath();
+			
+			//Top triangle
+			context.beginPath();
+			context.moveTo(20*scale, 0);
+			context.lineTo(180*scale, 0);
+			context.lineTo(100*scale, 40*scale);
+			context.stroke();
+			context.fill();
+			context.closePath();
+			
+			//Bottom triangle
+			context.beginPath();
+			context.moveTo(20*scale, 100*scale);
+			context.lineTo(180*scale, 100*scale);
+			context.lineTo(100*scale, 60*scale);
+			context.stroke();
+			context.fill();
+			context.closePath();
+		}
+		
+		function drawIrishCross(scale) {
+			context.beginPath();
+			context.strokeStyle = "#CC0000";
+			context.moveTo(0, 5*scale);
+			context.lineTo(200*scale, 98*scale);
+			context.lineWidth = 6*scale;
+			context.stroke();
+			context.closePath();
+			
+			context.beginPath();
+			context.strokeStyle = "#CC0000";
+			context.moveTo(10, 100*scale);
+			context.lineTo(190*scale, 0*scale);
+			context.lineWidth = 6*scale;
+			context.stroke();
+			context.closePath();
+		}
+	</script>
+</body>
+</html>
