@@ -1,3 +1,19 @@
+var gameStart = false;
+
+function startOrPauseGame() {
+	var button = document.getElementById("startGame");
+	if(button.value == "pause") {
+		button.value = "start";
+		button.innerHTML = "Pause";
+		gameStart = true;
+	} else if (button.value == "start") {
+		button.value = "pause";
+		button.innerHTML = "Resume";
+		gameStart = false;
+	}
+}
+
+
 $(document).ready(function() {
 	var canvas = $("#canvas")[0];
 	var gridWidth = 20;
@@ -16,6 +32,8 @@ $(document).ready(function() {
 	//Game of life info
 	var numStillAlive = 0;
 	var nextGridValues = [];
+	
+	
 	
 	//Create zero filled, two dimensional array
 	var grid = {};
@@ -56,22 +74,33 @@ $(document).ready(function() {
 	function paintGrid() {
 		bgFill();
 		numStillAlive = 0;
-		for (var j=0; j<gridHeight; j++) {
-			for (var i=0; i<gridWidth; i++) {
-				if (grid[j][i] == 1) {
-					numStillAlive += 1;
-					ctx.fillStyle = "black";
-					ctx.fillRect(i*w/gridWidth, j*h/gridHeight, w/gridWidth, h/gridHeight);
+		if (gameStart) {
+			for (var j=0; j<gridHeight; j++) {
+				for (var i=0; i<gridWidth; i++) {
+					if (grid[j][i] == 1) {
+						numStillAlive += 1;
+						ctx.fillStyle = "black";
+						ctx.fillRect(i*w/gridWidth, j*h/gridHeight, w/gridWidth, h/gridHeight);
+					}
+					conwayRules(j,i);
 				}
-				conwayRules(j,i);
+			}
+		
+			while(nextGridValues.length != 0) {
+				var update = nextGridValues.pop();
+				grid[update.h][update.w] = update.value;
+			}
+		} else {
+			for (var j=0; j<gridHeight; j++) {
+				for (var i=0; i<gridWidth; i++) {
+					if (grid[j][i] == 1) {
+						numStillAlive += 1;
+						ctx.fillStyle = "black";
+						ctx.fillRect(i*w/gridWidth, j*h/gridHeight, w/gridWidth, h/gridHeight);
+					}
+				}
 			}
 		}
-		
-		while(nextGridValues.length != 0) {
-			var update = nextGridValues.pop();
-			grid[update.h][update.w] = update.value;
-		}
-		
 		
 		if (numStillAlive == 0) {
 			//return;
@@ -121,6 +150,17 @@ $(document).ready(function() {
 		}
 	}
 	
+	canvas.addEventListener("mousedown", getPosition, false);
 	
+	function getPosition(event) {
+		var x = event.x;
+		var y = event.y;
+		
+		x -= canvas.offsetLeft;
+		y -= canvas.offsetTop;
+		var gridPixelWidthChosen = Math.floor(x/w * gridWidth)
+		var gridPixelHeightChosen = Math.floor(y/h * gridHeight);
+		grid[gridPixelHeightChosen][gridPixelWidthChosen] = !(grid[gridPixelHeightChosen][gridPixelWidthChosen]);
+	}
 	
 })
