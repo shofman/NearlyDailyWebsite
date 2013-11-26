@@ -69,6 +69,7 @@ $(document).ready(function() {
 		else if (key == "72") alert(player.x + " " + player.y);
 		else if (keyPressed["16"] && key == "65") { showAlert = !showAlert; alert(showAlert);}
 		else if (key == "86") paintConnection();
+		else if (key == "66") paintVoid();
 		keyPressed[key] = true;
 		
 	})
@@ -150,7 +151,7 @@ $(document).ready(function() {
 			var rectWidth = Math.abs(largerX - smallerX) + 1;
 			
 			el.innerHTML = downXPos + " " + downYPos + " " + upXPos + " " + upYPos + " " + rectWidth + " " + rectHeight;
-			coverRectangle(rectWidth, rectHeight, smallerX, smallerY);
+			coverOtherRectangle(rectWidth, rectHeight, smallerX, smallerY);
 
 		} else {
 			if (keyPressed["17"] && world[upXPos][upYPos].hasPlayer && player.exists) {
@@ -164,13 +165,105 @@ $(document).ready(function() {
 				player.exists = true;
 			}
 			else if(world[upXPos][upYPos].hasObstacle) {
-				world[upXPos][upYPos].remove();
+				if (world[upXPos][upYPos].obstacleType == "belongsMid" || world[upXPos][upYPos].obstacleType == "mid") {
+					var mid = collapse(upXPos, upYPos, midObstacle, "mid");
+					for (var i=0; i<midObstacle; i++) {
+						for (var j=0; j<midObstacle; j++) {
+							world[mid.x+i][mid.y+j].obstacleType = "small";
+						}
+					}
+					world[upXPos][upYPos].remove();
+				} else if (world[upXPos][upYPos].obstacleType == "belongsLarge" || world[upXPos][upYPos].obstacleType == "large") {
+					var large = collapse(upXPos, upYPos, largeObstacle, "large");
+
+					for (var i=0; i<largeObstacle; i++) {
+						for (var j=0; j<largeObstacle; j++) {
+							if(i%2==0 && j%2==0) {
+								world[large.x+i][large.y+j].obstacleType = "mid";
+							} else {
+								world[large.x+i][large.y+j].obstacleType = "belongsMid";
+							}
+						}
+					}
+					
+					var mid2 = collapse(upXPos, upYPos, midObstacle, "mid");
+					for (var i=0; i<midObstacle; i++) {
+						for (var j=0; j<midObstacle; j++) {
+							world[mid2.x+i][mid2.y+j].obstacleType = "small";
+						}
+					}
+					world[upXPos][upYPos].remove();
+				} else {
+					world[upXPos][upYPos].remove();
+				}
 			} else if (!world[upXPos][upYPos].hasPlayer){
 				world[upXPos][upYPos].setObstacle("small");
+				checkMidGroup(upXPos, upYPos);
 			}
 		}
 		paintWorld();
 		mouseDownPressed = false;
+	}
+	
+	function checkMidGroup(upXPos, upYPos) {
+		var madeObstacle = false;
+		if (upXPos - 1 >= 0) {
+			if (upYPos - 1 >= 0) {
+				if (!madeObstacle && removeAndMakeObstacle(upXPos-1, upYPos-1, upXPos, upYPos, "mid") ) {
+					makeObstacle(upYPos-1, upXPos-1, "mid");
+					madeObstacle = true;
+				}
+			} 
+			if (upYPos + 1 < levelHeight) {
+				if (!madeObstacle && removeAndMakeObstacle(upXPos - 1, upYPos+1, upXPos, upYPos, "mid")) {
+					makeObstacle(upYPos, upXPos-1, "mid");
+					madeObstacle = true;							
+				} 
+			}
+		} 
+		if (upXPos + 1 < levelWidth) {
+			if (upYPos - 1 >= 0) {
+				if (!madeObstacle && removeAndMakeObstacle(upXPos+1, upYPos-1, upXPos, upYPos, "mid")) {
+					makeObstacle(upYPos-1, upXPos, "mid");
+					madeObstacle = true;
+				} 
+			}
+			if (upYPos + 1< levelHeight) {
+				if (!madeObstacle && removeAndMakeObstacle(upXPos + 1, upYPos+1, upXPos, upYPos, "mid")) {
+					makeObstacle(upYPos, upXPos, "mid");
+					madeObstacle = true;
+				} 
+			} 
+		}
+	}
+	
+	function removeAndMakeObstacle(adjustedX, adjustedY, normalX, normalY, type) {
+		if (world[adjustedX][adjustedY].obstacleType == "small" && world[normalX][adjustedY].obstacleType == "small" && world[adjustedX][normalY].obstacleType == "small") {
+			world[adjustedX][adjustedY].remove();
+			world[adjustedX][normalY].remove();
+			world[normalX][adjustedY].remove();
+			world[normalX][normalY].remove();
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function collapse(upXPos, upYPos, objectSize, lookfor) {
+			var midValueX;
+			var midValueY;
+			var size = objectSize - 1;
+			for (var i=0; i<objectSize; i++) {
+				for (var j=0; j<objectSize; j++) {
+					if (upXPos-size+i >= 0 && upYPos-size+j>=0 && upXPos-size+i < levelWidth && upYPos-size+j < levelHeight) {
+						if (world[upXPos-size+i][upYPos-size+j].obstacleType == lookfor) {
+							midValueX = upXPos-size+i;
+							midValueY = upYPos-size+j;
+						}
+					}
+				}
+			}
+			return {x:midValueX, y:midValueY};
 	}
 	
 	var downXPos;
@@ -227,7 +320,10 @@ $(document).ready(function() {
 			for (var i=0; i<midObstacle; i++) {
 				for (var j=0; j<midObstacle; j++) {
 					world[y+i][x+j].hasObstacle = true;
-					world[y][x].obstacleType = type;
+					if (i==0 && j==0) world[y+i][x+j].obstacleType = type;
+					else world[y+i][x+j].obstacleType = "belongsMid";
+
+
 				}
 			}
 		} else if (type == "large") {
@@ -244,7 +340,8 @@ $(document).ready(function() {
 			for (var i=0; i<largeObstacle; i++) {
 				for (var j=0; j<largeObstacle; j++) {
 					world[y+i][x+j].hasObstacle = true;
-					world[y][x].obstacleType = type;
+					if (i==0 && j==0) world[y+i][x+j].obstacleType = type;
+					else world[y+i][x+j].obstacleType = "belongsLarge";
 				}
 			}
 		}
@@ -314,6 +411,32 @@ $(document).ready(function() {
 		}
 	}
 	
+
+	
+	function coverOtherRectangle(rectWidth, rectHeight, smallerX, smallerY) {
+		for (var j=0; j<rectHeight; j++) {
+			for (var i=0; i<rectWidth; i++) {
+				if (!(world[ smallerX + i][smallerY + j].hasObstacle) && i + largeObstacle - 1 < rectWidth && j + largeObstacle - 1 < rectHeight) {
+					if (!makeObstacle(smallerY + j, smallerX + i, "large")) {
+						if (!makeObstacle(smallerY+j, smallerX + i, "mid")) {
+							makeObstacle(smallerY+j, smallerX + i, "small");
+							checkMidGroup(smallerY+j, smallerX + i);
+						}
+					}
+				} else if (!(world[ smallerX + i][smallerY + j].hasObstacle) && i + midObstacle - 1< rectWidth && j + midObstacle - 1 < rectHeight) {
+					if (!makeObstacle(smallerY+j, smallerX + i, "mid")) {
+						makeObstacle(smallerY+j, smallerX + i, "small");
+						checkMidGroup(smallerY+j, smallerX + i);
+					}
+				} else if (!(world[i + smallerX][smallerY + j].hasObstacle) && i + smallObstacle - 1< rectWidth &&  j + smallObstacle - 1< rectHeight) {
+					makeObstacle(smallerY + j, smallerX + i,"small");
+					paintWorld();
+					checkMidGroup(smallerX + i, smallerY+j);
+				}
+			}
+		}
+	}
+	
 	function paintConnection() {
 		fillBG();
 		for (var i=0; i<levelHeight; i++) {
@@ -327,35 +450,22 @@ $(document).ready(function() {
 		}
 	}
 	
-	function coverOtherRectangle(rectWidth, rectHeight, smallerX, smallerY) {
-		for (var j=0; j<rectHeight; j++) {
-			for (var i=0; i<rectWidth; i++) {
-				if (!(world[ smallerX + i][smallerY + j].hasObstacle) && i + largeObstacle - 1 < rectWidth && j + largeObstacle - 1 < rectHeight) {
-					if (!makeObstacle(smallerY + j, smallerX + i, "large")) {
-						if (!makeObstacle(smallerY+j, smallerX + i, "mid")) {
-							makeObstacle(smallerY+j, smallerX + i, "small");
-						}
-					}
-				} else if (!(world[ smallerX + i][smallerY + j].hasObstacle) && i + midObstacle - 1< rectWidth && j + midObstacle - 1 < rectHeight) {
-					if (!makeObstacle(smallerY+j, smallerX + i, "mid")) {
-						makeObstacle(smallerY+j, smallerX + i, "small");
-					}
-				} else if (!(world[i + smallerX][smallerY + j].hasObstacle) && i + smallObstacle - 1< rectWidth &&  j + smallObstacle - 1< rectHeight) {
-					makeObstacle(smallerY + j, smallerX + i,"small");
+	function paintVoid() {
+		fillBG();
+		for (var i=0; i<levelHeight; i++) {
+			for (var j=0; j<levelWidth; j++) {
+				if (world[i][j].hasPlayer) {
+					personPaint(i,j);
+				} else if (world[i][j].hasObstacle) {
+					if (world[i][j].obstacleType == "belongsLarge")
+						paintX(i,j);
+					else if (world[i][j].obstacleType == "belongsMid")
+						smallObstaclePaint(i,j);
 				}
 			}
 		}
 	}
-	
-	function coverRectangle(rectWidth, rectHeight, smallerX, smallerY) {
-		for (var j=0; j<rectHeight; j++) {
-			for (var i=0; i<rectWidth; i++) {
-				if (!(world[i + smallerX][smallerY + j].hasObstacle) && i + smallObstacle - 1< rectWidth &&  j + smallObstacle - 1< rectHeight) {
-					makeObstacle(smallerY + j, smallerX + i,"small");
-				}
-			}
-		}
-	}
+
 	
 	function paintX(x,y) {
 		ctx.fillStyle = "black";
