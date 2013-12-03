@@ -23,7 +23,6 @@ $(document).ready(function() {
 	var ctx = canvas.getContext("2d");
 
 	/*TODO
-	Allow user to click
 	Make ajax for autorefresh
 	Add pause button
 	Allow for wrap around	
@@ -32,9 +31,7 @@ $(document).ready(function() {
 	//Game of life info
 	var numStillAlive = 0;
 	var nextGridValues = [];
-	
-	
-	
+		
 	//Create zero filled, two dimensional array
 	var grid = {};
 	for (var i = 0; i<gridHeight; i++) {
