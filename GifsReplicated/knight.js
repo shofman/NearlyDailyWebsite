@@ -6,7 +6,7 @@ $(document).ready(function() {
 	canvas.addEventListener("mousedown", getPosition, false);
 	var currKnightPos = {x:0,y:0};
 	var chessBoard = [];
-	var chessBoardSize = 6;
+	var chessBoardSize = 5;
 	for (var i = 0; i<chessBoardSize; i++) {
 		chessBoard[i] = [];
 		for (var j=0; j<chessBoardSize; j++) {
@@ -23,10 +23,20 @@ $(document).ready(function() {
 	draw();
 	document.getElementById("undo").onclick = undo;
 	document.getElementById("bruteforce").onclick = checkBruteForce;
+	document.getElementById("prevbrute").onclick = checkBruteForce2;
 	
+	function checkBruteForce2() {
+		//alert("This");
+		var found = bruteForceSolution();
+		if (!found) alert("no solution");
+	}
+
 	function checkBruteForce() {
-		var solved = bruteForceSolution();
-		if (!solved) alert("No solution");
+		foundBruteForce = false;
+		index = 0;
+		listOfStacks = [];
+		solved = animateBruteForce();
+		//if (!solved) alert("No solution");
 	}
 	
 	function undo() {
@@ -66,10 +76,62 @@ $(document).ready(function() {
 		}
 		return true;
 	}
+	var foundBruteForce = false;
+	var index = 0;
+	var listOfStacks = [];
+	
+	function animateBruteForce() {
+        // update
+		if (listOfStacks.length <= index) {
+			var stack = [];
+			findPossibleMoves(stack);
+			if (stack.length == 0) {
+				foundBruteForce = checkBruteForceVictory();
+				if (foundBruteForce) {
+					alert("This");
+					return;
+				}
+				else { 
+					undo();
+					index--;
+				}
+			} else {
+				listOfStacks.push(stack);
+				if(listOfStacks[index].length != 0) {
+					var move = listOfStacks[index].pop();
+					updateBoard(move.x,move.y);
+					index++;
+				}
+			}
+		} else {
+			if(listOfStacks[index].length != 0) {
+				var move = listOfStacks[index].pop();
+				updateBoard(move.x,move.y);
+				index++;
+			} else {
+				//Pop empty stack
+				listOfStacks.pop();
+				undo();
+				index--;
+			}
+		}
+
+
+	
+        // clear
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        // draw
+		draw();
+
+        // request new frame
+        requestAnimationFrame(function() {
+          animateBruteForce();
+        });
+    }
 	
 	function bruteForceSolution() {
 		var stack = [];
-		//var boardCopy = copyChessBoard();
 		findPossibleMoves(stack);
 		if (stack.length == 0) {
 			if (checkBruteForceVictory()) {
@@ -79,11 +141,10 @@ $(document).ready(function() {
 		}
 		var found = false;
 		while(stack.length != 0) {
-			//chessBoard = boardCopy;
 			var move = stack.pop();
 			updateBoard(move.x,move.y);
 			draw();
-			alert("This");
+			alert("this");
 			var result = bruteForceSolution();
 			if (!result) undo();
 			else return true;
