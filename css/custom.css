@@ -1,0 +1,93 @@
+@import url("http://getbootstrap.com/2.3.2/assets/css/bootstrap.css");
+      body {
+        padding-top: 20px;
+        padding-bottom: 40px;
+      }
+	  
+	  .information{
+		 margin-left: 10px;
+	  }
+	  
+	  .pullleft {
+		float: left;
+	  }
+	  
+	  .pullright {
+		float:right;
+	  }
+	  
+	  .muted {
+		margin-top: 5px;
+		margin-left: 5px;
+	  }
+	  
+	  .nav {
+		margin-top: 5px;
+		margin-right: 5px;
+	  }
+
+      /* Custom container */
+      .container-narrow {
+        margin: 0 auto;
+        max-width: 700px;
+		background: url('../img/cream_dust_transparent.png') repeat 0 0;
+      }
+      .container-narrow > hr {
+        margin: 30px 0;
+      }
+
+      /* Main marketing message and sign up button */
+      .jumbotron {
+        margin: 60px 0;
+        text-align: center;
+		
+      }
+      .jumbotron h1 {
+        font-size: 72px;
+        line-height: 1;
+      }
+      .jumbotron .btn {
+        font-size: 21px;
+        padding: 14px 24px;
+		margin-right: 8px;  
+      }
+
+      /* Supporting marketing content */
+      .marketing {
+        margin: 60px 0;
+		margin-left: 5px;
+		margin-right: 10px;
+      }
+      .marketing p + h4 {
+        margin-top: 28px;
+      }
+	  
+	  .row-fluid marketing {
+
+	  }
+	  
+	  h1, h2, h3, h4, h5, h6 {
+		 font-family: 'Raleway', Helvetica, Arial, sans-serif;
+		 
+		}
+		h1 {
+			font-size: 70px;
+			padding: 20px;
+		}
+		h2 {
+			font-size: 40px;
+			margin-left: 10px;
+			margin-bottom: 20px;
+		}
+		h4 {
+			font-size: 25px;
+			margin-left: 10px;
+			margin-bottom: 20px;
+		}
+
+	p, div {
+		font-family: 'Goudy Bookletter 1911', Georgia, Times, serif;
+		font-size: 20px;
+		margin-left: 20px;
+		margin-right: 10px;	
+	}
