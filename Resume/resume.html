@@ -1,8 +1,10 @@
 <!DOCTYPE HTML> 
 <head>
+	<meta charset="utf-8">
+	<meta name="author" content="Scott Hofman">
     <LINK href="resume.css" rel="stylesheet">
 	<link href="../css/custom.css" rel="stylesheet">
-	<link href="../fonts/font-awesome.css" rel="stylesheet">
+	<link href="../css/font-awesome.css" rel="stylesheet">
 	<link href="http://fonts.googleapis.com/css?family=Goudy+Bookletter+1911" rel="stylesheet" type="text/css">
 	<link href="http://fonts.googleapis.com/css?family=Raleway:100" rel="stylesheet" type="text/css">
 </head>
@@ -29,8 +31,9 @@
 <p class = "pullleft">University of Edinburgh, Edinburgh, UK </p>
 <p class = "pullright"> Sept 2009 - July 2013 </p>
 <div style="clear: both;"></div>
-<p>BEng in Software Engineering with First Class Honours </p>
-<p> (Equivalent to an American GPA range  of 3.75-4.00) </p>
+<p class = "pullleft" style="margin-right: 0px;">BEng in Software Engineering with </p><div id = "honours"><p  class = "pullleft" style = "margin-left: 0px;" id = "first">First Class Honours</p></div>
+<div id="honours-info"><p id="conversion">(Equivalent to an American GPA range  of 3.75-4.00)<p></div>
+<div style="clear: both;"></div>
 </section>
 <hr>
 <section>
@@ -38,7 +41,7 @@
 <p class = "pullleft"><b><a href="http://basewarp.com">Basewarp</a></b></p>
 <p class = "pullright">August 2013 - Present</p>
 <div style="clear: both;"></div>
-<p>Contract Software Developer<p>
+<p>Contract Software Developer</p>
 <p>Scottish-Finnish Android startup company, Basewarp application available on Google Play.</p>
 <p>Self-motivated, remote contribution to application.</p>
 <p>Worked on the core functionality, testing, and bug fixes of application.</p>
@@ -95,6 +98,16 @@
 <h2>Interests</h2>
 <p><b>Travelling: </b>Have travelled to 47 different countries across the world.</p>
 <p><b>Writing:</b> Written two novels (intending to pursue publication), eight short stories, one play (winner of 2007 Syracuse Young Playwright Award).</p>
-<p><b>Sports:</b> Soccer, Skiing, Golf, Shukokai Karate.</p>
+<p style = "padding-bottom: 30px;"><b>Sports:</b> Soccer, Skiing, Golf, Shukokai Karate.</p>
 </div>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
+	<script src="resume.js"></script>
+	<script>
+	  $.backstretch("../img/background.jpg");
+	</script>
+	
+	<footnote>
+		<p>Copyright 2013 Scott Hofman </p>
+	</footnote>
 </body>

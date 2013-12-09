@@ -15,57 +15,38 @@
 	  .pullright {
 		float:right;
 	  }
-	  
-	  .muted {
-		margin-top: 5px;
-		margin-left: 5px;
-	  }
-	  
-	  .nav {
-		margin-top: 5px;
-		margin-right: 5px;
-	  }
 
-      /* Custom container */
       .container-narrow {
         margin: 0 auto;
         max-width: 700px;
 		background: url('../img/cream_dust_transparent.png') repeat 0 0;
       }
+	  
       .container-narrow > hr {
         margin: 30px 0;
       }
-
-      /* Main marketing message and sign up button */
-      .jumbotron {
-        margin: 60px 0;
-        text-align: center;
-		
-      }
-      .jumbotron h1 {
-        font-size: 72px;
-        line-height: 1;
-      }
-      .jumbotron .btn {
-        font-size: 21px;
-        padding: 14px 24px;
-		margin-right: 8px;  
-      }
-
-      /* Supporting marketing content */
-      .marketing {
-        margin: 60px 0;
-		margin-left: 5px;
-		margin-right: 10px;
-      }
-      .marketing p + h4 {
-        margin-top: 28px;
-      }
 	  
-	  .row-fluid marketing {
-
+	  #first {
+		color: deepskyblue;
 	  }
 	  
+	  # honours-info{
+		overflow: auto;
+	  }
+	  
+		#conversion	{
+			font-size: 15px;
+			margin-left: 300px;
+			padding: 0px;
+			margin-right: 0px;
+			margin-bottom: 0px;
+			border: 0px;
+			float: right;
+			display: inline;
+		}
+	  
+	  
+
 	  h1, h2, h3, h4, h5, h6 {
 		 font-family: 'Raleway', Helvetica, Arial, sans-serif;
 		 
@@ -84,10 +65,20 @@
 			margin-left: 10px;
 			margin-bottom: 20px;
 		}
-
-	p, div {
+	div, p, span {
 		font-family: 'Goudy Bookletter 1911', Georgia, Times, serif;
 		font-size: 20px;
+		font-weight: normal;
+	}
+	
+	p {
 		margin-left: 20px;
-		margin-right: 10px;	
+		margin-right: 20px;	
+		padding: 5px;
+	}
+	
+
+	
+	footnote {
+		color: white;
 	}
