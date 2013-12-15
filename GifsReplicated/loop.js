@@ -44,11 +44,12 @@ $(document).ready(function() {
 
         // draw
 		fillBG();
-		drawCircle();
+		drawCircleEndpoint();
 		drawStationaryPoint();
 		drawAnchoredLine();
 		drawMidpointLine();
 		drawMovingCircleRadius();
+		displayHelpText();
 		if(showMovingLineCircle) {
 			drawMovingLineCircle();
 		}
@@ -67,7 +68,9 @@ $(document).ready(function() {
         });
     }
 	
-
+	function convertToRadians(degrees) {
+		return degrees * (Math.PI/180)
+	}
 	
 	function findMovingLine() {
 		var roundedX = Math.round(rotatedIntersectX);
@@ -86,16 +89,6 @@ $(document).ready(function() {
 		var deltaY = movingLine.y1 - circle.posY;
 		movingLine.x2 = circle.posX - deltaX;
 		movingLine.y2 = circle.posY - deltaY;
-	}
-	
-	function drawMidpointLine() {
-		context.beginPath();
-		context.lineWidth = 2;
-		context.strokeStyle = "blue";
-		context.moveTo(movingLine.x2, movingLine.y2);
-		context.lineTo(movingLine.x1, movingLine.y1);
-		context.stroke();
-		context.closePath();
 	}
 	
 	var rotatedIntersectX;
@@ -183,6 +176,16 @@ $(document).ready(function() {
 		}
 	}
 	
+	function drawMidpointLine() {
+		context.beginPath();
+		context.lineWidth = 2;
+		context.strokeStyle = "blue";
+		context.moveTo(movingLine.x2, movingLine.y2);
+		context.lineTo(movingLine.x1, movingLine.y1);
+		context.stroke();
+		context.closePath();
+	}
+	
 	function drawLemniscate() {
 		var pointToAdd = {x: movingLine.x2, y:movingLine.y2};
 		lemniscate.addPoint(pointToAdd);
@@ -202,15 +205,6 @@ $(document).ready(function() {
 		context.beginPath();
 		context.moveTo(circle.posX, circle.posY);
 		context.lineTo(circle.x, circle.y);
-		context.stroke();
-		context.closePath();
-	}
-	
-	function drawLineBetweenCircleCenters() {
-		context.strokeStyle = "green";
-		context.beginPath();
-		context.moveTo(circle.posX, circle.posY);
-		context.lineTo(stationaryPoint.x, stationaryPoint.y);
 		context.stroke();
 		context.closePath();
 	}
@@ -246,14 +240,19 @@ $(document).ready(function() {
 		context.closePath();
 	}
 	
-	function drawCircle() {
+	function drawCircleEndpoint() {
 		context.fillStyle = "black";
 		context.fillRect(circle.posX-2,circle.posY - 2,4, 4);
 	}
 	
-	function convertToRadians(degrees) {
-		return degrees * (Math.PI/180)
+	function displayHelpText() {
+		context.font="15px Arial";
+		context.fillText("Press 1 to see moving line radius",10,20);
+		context.fillText("Press 2 to see stationary line radius", 10, 40);
+		context.fillText("Press 3 to see midpoint line radius", 10, 60);
 	}
+	
+
 	
 	function fillBG() {
 		context.fillStyle = "white";
